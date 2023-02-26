@@ -58,6 +58,8 @@
     "user_bot",
     "random_bot",
     "random_bot",
+    "random_bot",
+    "random_bot",
     "random_bot"
   ],
   "levels": [
@@ -128,11 +130,14 @@
     },
     {
       "map": 5,
-      "steps": 400,
-      "start1": [8, 7],
-      "start2": [8, 7],
-      "start3": [8, 7],
-      "start4": [0, 5]
+      "steps": 4000,
+      "start1": [18, 9],
+      "start2": [30, 7],
+      "start3": [30, 8],
+      "start3": [30, 9],
+      "start4": [1, 6],
+      "start5": [1, 7],
+      "start6": [1, 8]
     }
   ],
   "maps": [

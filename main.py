@@ -21,6 +21,7 @@ PLAYER = "player"
 GOLD = "gold"
 WALL = "wall"
 EMPTY = "empty"
+COLPLA = "colpla"
 
 
 class Board:
@@ -31,16 +32,15 @@ class Board:
         self.label = label
         self.tileset = load_tileset(game["tileset"])
         self.screen = PliTk(canvas, 0, 0, 0, 0, self.tileset, SCALE)
-        self.level_index = 5
+        self.level_index = 4
         self.isStart = False
         self.load_players()
         self.load_level()
         self.button_play()
-        self.player = self.players[0]
         root.bind("<KeyPress>", self.on_key_press)
 
     def on_key_press(self, event):
-        if self.level_index < 5 or not self.isStart:
+        if self.level_index < 5 or not self.isStart or self.steps >= self.level["steps"]:
             return
         if event.keysym == "a":
             self.player.act(LEFT)
@@ -93,7 +93,14 @@ class Board:
             script = import_module(name).script
             tile = self.game["tiles"]["@"][i]
             self.players.append(Player(name, script, self, tile))
-        # shuffle(self.players)
+        self.player = self.players[0]
+
+    def random_gold(self):
+        typeGold = random.randint(1, 9)
+        x = random.randint(1, self.screen.cols - 2)
+        y = random.randint(1, self.screen.rows - 2)
+        self.screen.set_tile(x, y, self.game["tiles"][f"{typeGold}"])
+        self.map[x][y] = f"{typeGold}"
 
     def load_level(self):
         self.gold = 0
@@ -158,11 +165,11 @@ class Board:
     def play(self):
         for p in self.players:
             if self.isStart:
-                if self.level_index < 5 or (self.level_index >= 5 and p.name == "random_bot"):
-                    p.act(p.script(self.check, p.x, p.y))
-                else:
-                    p.script(self.check, p.x, p.y)
-            if self.gold >= self.level["gold"]:
+                mesAct = p.script(self.check, p.x, p.y)
+                p.act(mesAct)
+                if mesAct == TAKE and self.level_index >= 5:
+                    self.random_gold()
+            if self.gold >= self.level["gold"] and self.level_index < 5:
                 return self.select_next_level()
         if self.isStart:
             self.steps += 1
@@ -205,6 +212,11 @@ class Player:
             dx += 1
         elif cmd == TAKE:
             self.take()
+        elif cmd == COLPLA:
+            self.board.steps = self.board.level["steps"]
+        if self.board.check("player", self.x + dx, self.y + dy) and self == self.board.player and (dx != 0 or dy != 0):
+            print("?")
+            self.board.steps = self.board.level["steps"]
         self.move(dx, dy)
 
     def move(self, dx, dy):

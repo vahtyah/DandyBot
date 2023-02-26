@@ -38,7 +38,8 @@ def ExploreNeighbors(check, grid, currentSearchNode, reached, frontQue):
             neighbors.append(grid[f"{neighborCoordinates.x};{neighborCoordinates.y}"])
 
     for neighbor in neighbors:
-        if reached.get(f"{neighbor.coordinate.x};{neighbor.coordinate.y}") is None and not check("wall", neighbor.coordinate.x, neighbor.coordinate.y):
+        if reached.get(f"{neighbor.coordinate.x};{neighbor.coordinate.y}") is None and not check("wall", neighbor.coordinate.x, neighbor.coordinate.y) \
+                and not check("player", neighbor.coordinate.x, neighbor.coordinate.y):
             neighbor.connectionTo = currentSearchNode
             reached[f"{neighbor.coordinate.x};{neighbor.coordinate.y}"] = neighbor
             frontQue.put(neighbor)
@@ -79,7 +80,6 @@ def ChooseDirector(x, y, coordinate):
         return "down"
     if offset.y > 0:
         return "up"
-    print("pass")
     return "pass"
 
 
