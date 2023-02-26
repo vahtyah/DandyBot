@@ -32,11 +32,11 @@ class Board:
         self.label = label
         self.tileset = load_tileset(game["tileset"])
         self.screen = PliTk(canvas, 0, 0, 0, 0, self.tileset, SCALE)
-        self.level_index = 4
+        self.level_index = 0
         self.isStart = False
         self.load_players()
         self.load_level()
-        self.button_play()
+        self.button()
         root.bind("<KeyPress>", self.on_key_press)
 
     def on_key_press(self, event):
@@ -75,9 +75,9 @@ class Board:
             DELAY -= 50
         print(DELAY)
 
-    def button_play(self):
-        button = tk.Button(self.root, text="Start/Pause", command=self.onPlayPauseButtonClick)
-        button.grid(row=1, column=1, sticky="ewn")
+    def button(self):
+        buttonPlayPause = tk.Button(self.root, text="Start/Pause", command=self.onPlayPauseButtonClick)
+        buttonPlayPause.grid(row=1, column=1, sticky="ewn")
         buttonNextLV = tk.Button(self.root, text="Next Level", command=self.onNextLevelButtonClick)
         buttonNextLV.grid(row=2, column=1, sticky="ewn")
         buttonExit = tk.Button(self.root, text="Exit", command=self.onQuitButtonClick)
@@ -215,7 +215,7 @@ class Player:
         elif cmd == COLPLA:
             self.board.steps = self.board.level["steps"]
         if self.board.check("player", self.x + dx, self.y + dy) and self == self.board.player and (dx != 0 or dy != 0):
-            print("?")
+            print("GAME OVER!")
             self.board.steps = self.board.level["steps"]
         self.move(dx, dy)
 
